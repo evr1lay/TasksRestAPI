@@ -59,32 +59,21 @@ db.sqlite3-journal
 # Flask stuff (если вдруг используете)
 instance/
 .webassets-cache
-
-# Scrapy stuff:
+ 
 .scrapy
 
-# Sphinx documentation
 docs/_build/
 
-# PyBuilder
 .pybuilder/
 target/
 
-# Jupyter Notebook
 .ipynb_checkpoints
 
-# IPython
 profile_default/
 ipython_config.py
-
-# Celery stuff
 celerybeat-schedule
 celerybeat.pid
-
-# SageMath parsed files
 *.sage.py
-
-# Environments (виртуальные окружения)
 .env
 .venv
 env/
@@ -92,38 +81,24 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
-# Spyder project settings
 .spyderproject
 .spyproject
-
-# Rope project settings
 .ropeproject
-
-# mypy
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
 .pyre/
-
-# pytype static type analyzer
 .pytype/
-
-# Cython debug symbols
 cython_debug/
 
 # ===================================================
 # ДОПОЛНЕНИЯ ДЛЯ FASTAPI И ВЕБ-РАЗРАБОТКИ
 # ===================================================
 
-# Логи приложения (если вы пишете логи в файлы)
 *.log
 logs/
 *.pid
 
-# Файлы с секретами и переменными окружения (ОЧЕНЬ ВАЖНО!)
 .env
 .env.local
 .env.*.local
@@ -134,39 +109,18 @@ logs/
 *.key
 *.crt
 
-# Базы данных (если используете локальные файлы БД)
 *.db
 *.sqlite
 *.sqlite3
 
-# Alembic (миграции базы данных) - оставляем только файлы миграций,
-# но игнорируем временные файлы
 alembic/versions/*.pyc
 alembic/versions/__pycache__/
 
-# VS Code (если используете)
 .vscode/
 *.code-workspace
 
-# PyCharm (если используете)
-.idea/
-*.iml
-
-# Файлы, создаваемые при запуске uvicorn
 uvicorn.log
 gunicorn.log
 
-# Docker (если используете)
-.dockerignore
-*.pid
-
-# Redis (если используете локальный Redis)
-dump.rdb
-
-# Файлы с данными для тестов
 test_data/
 *.test.db
-
-# Файлы документации (если генерируете автоматически)
-site/
-docs/_build/
