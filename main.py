@@ -24,7 +24,6 @@ async def add_task(payload: TaskAddSchema) -> dict:
         completed = False,
     )
     tasks.append(new_task)
-    
     return {"success": True}
     
 @app.get("/tasks", tags=["🔍 GET-ЗАПРОСЫ"])
