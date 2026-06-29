@@ -52,7 +52,7 @@ async def get_tasks(request: Request) -> list:
     user_ip_address = request.client.host
     user_tasks = get_user_tasks(user_ip_address)
     
-    return user_tasks
+    return [{"id": task.id, "title": task.title, "completed": task.completed} for task in user_tasks]
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8000, reload=True)
