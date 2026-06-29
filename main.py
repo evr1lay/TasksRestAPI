@@ -1,10 +1,27 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 
 from uuid import uuid4
+from db import Base, engine, add_task_in_db, get_user_tasks
+
 import uvicorn
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(engine)
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500"], # p.s. ВАШ САЙТ
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class TaskSchema(BaseModel):
     id: str
@@ -13,29 +30,29 @@ class TaskSchema(BaseModel):
     
 class TaskAddSchema(BaseModel):
     title: str
-    
-tasks: list[TaskSchema] = []
 
 @app.post("/tasks/add", tags=["📚 POST-ЗАПРОСЫ"])
-async def add_task(payload: TaskAddSchema) -> dict:
+async def add_task(payload: TaskAddSchema, request: Request) -> dict:
+    user_ip_address = request.client.host
     new_task = TaskSchema(
         id = str(uuid4()),
         title = payload.title,
         completed = False,
     )
-    tasks.append(new_task)
+    add_task_in_db(
+        id=new_task.id,
+        ip_address=user_ip_address,
+        title=new_task.title,
+        completed=new_task.completed,
+    )
     return {"success": True}
     
 @app.get("/tasks", tags=["🔍 GET-ЗАПРОСЫ"])
-async def get_tasks() -> list:
-    return tasks
-
-@app.get("/tasks/{task_id}", tags=["🔍 GET-ЗАПРОСЫ"])
-async def get_tasks(task_id: str) -> dict:
-    for task in tasks:
-        if task.id == task_id:
-            return task
-    HTTPException(status_code=404, detail="Task not found")
+async def get_tasks(request: Request) -> list:
+    user_ip_address = request.client.host
+    user_tasks = get_user_tasks(user_ip_address)
+    
+    return user_tasks
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True)
+    uvicorn.run("main:app", port=8000, reload=True)
