@@ -50,13 +50,13 @@ cover/
 *.mo
 *.pot
 
-# Django stuff:
+# Django stuff (если вдруг используете)
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask stuff (если вдруг используете)
 instance/
 .webassets-cache
 
@@ -84,7 +84,7 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Environments (Виртуальные окружения, которые вы искали)
+# Environments (виртуальные окружения)
 .env
 .venv
 env/
@@ -114,6 +114,59 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# IDE (если нужно, раскомментируйте)
-# .idea/
-# .vscode/
+# ===================================================
+# ДОПОЛНЕНИЯ ДЛЯ FASTAPI И ВЕБ-РАЗРАБОТКИ
+# ===================================================
+
+# Логи приложения (если вы пишете логи в файлы)
+*.log
+logs/
+*.pid
+
+# Файлы с секретами и переменными окружения (ОЧЕНЬ ВАЖНО!)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.secrets
+*.pem
+*.key
+*.crt
+
+# Базы данных (если используете локальные файлы БД)
+*.db
+*.sqlite
+*.sqlite3
+
+# Alembic (миграции базы данных) - оставляем только файлы миграций,
+# но игнорируем временные файлы
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# VS Code (если используете)
+.vscode/
+*.code-workspace
+
+# PyCharm (если используете)
+.idea/
+*.iml
+
+# Файлы, создаваемые при запуске uvicorn
+uvicorn.log
+gunicorn.log
+
+# Docker (если используете)
+.dockerignore
+*.pid
+
+# Redis (если используете локальный Redis)
+dump.rdb
+
+# Файлы с данными для тестов
+test_data/
+*.test.db
+
+# Файлы документации (если генерируете автоматически)
+site/
+docs/_build/
