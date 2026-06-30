@@ -1,6 +1,10 @@
 # TasksRestAPI
 
-REST-API для to-do задач
+API для to-do задач.
+
+### 01.07.26 - ПОЛНЫЙ CRUD REST-API
+- Добавлен patch http метод в [FastAPI приложение](main.py)
+- Измененения в [db.py](db.py)
 
 ## РАЗРАБОТАНО НА ФРЕЙМВОРКЕ FastAPI
 
