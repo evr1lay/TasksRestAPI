@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from contextlib import asynccontextmanager
 
 from uuid import uuid4
-from db import Base, engine, add_task_in_db, get_user_tasks, delete_task_from_db
+from db import Base, engine, add_task_in_db, get_user_tasks, update_task_data, delete_task_from_db
 
 import uvicorn
 
@@ -30,6 +30,10 @@ class TaskSchema(BaseModel):
     
 class TaskAddSchema(BaseModel):
     title: str
+    
+class TaskUpdateSchema(BaseModel):
+    title: str
+    completed: bool
 
 @app.post("/tasks/add", tags=["📚 POST-ЗАПРОСЫ"])
 async def add_task(payload: TaskAddSchema, request: Request) -> dict:
@@ -53,6 +57,19 @@ async def get_tasks(request: Request) -> list:
     user_tasks = get_user_tasks(user_ip_address)
     
     return [{"id": task.id, "title": task.title, "completed": task.completed} for task in user_tasks]
+
+@app.patch("/tasks/update/{task_id}", tags=["✏️ PATCH-ЗАПРОСЫ"])
+async def update_task(payload: TaskUpdateSchema, task_id: str, request: Request) -> dict:
+    user_ip_address = request.client.host
+    updated = update_task_data(user_ip_address, task_id, payload.title, payload.completed)
+    
+    if not updated:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+    
+    return {"success": True}
 
 @app.delete("/tasks/{task_id}", tags=["🗑️ DELETE-ЗАПРОСЫ"])
 async def delete_task(task_id: str, request: Request) -> dict:

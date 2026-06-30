@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, select, delete
+from sqlalchemy import create_engine, select, update, delete
 from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column
 
 engine = create_engine(url="sqlite:///tasks.db", echo=False)
@@ -32,6 +32,33 @@ def get_user_tasks(ip_address: str) -> list:
         query = select(Tasks).filter_by(ip_address=ip_address)
         result = connection.execute(query)
         return list(result.scalars().all())
+
+def update_task_data(ip_address: str, task_id: str, title: str = None, completed: bool = None) -> bool:
+    with Session() as connection:
+        query = select(Tasks).filter_by(id=task_id, ip_address=ip_address)
+        result = connection.execute(query)
+        task = result.scalar_one_or_none()
+        
+        if not task:
+            return False
+        
+        update_data = {}
+        if title is not None:
+            update_data["title"] = title
+        if completed is not None:
+            update_data["completed"] = completed
+            
+        if not update_data:
+            return True
+        
+        update_query = (
+            update(Tasks)
+            .where(Tasks.id == task_id, Tasks.ip_address == ip_address)
+            .values(**update_data)
+        )
+        connection.execute(update_query)
+        connection.commit()
+        return True
     
 def delete_task_from_db(ip_address: str, task_id: str) -> bool:
     with Session() as connection:
