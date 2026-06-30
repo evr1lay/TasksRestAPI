@@ -39,7 +39,7 @@ def delete_task_from_db(ip_address: str, task_id: str) -> bool:
         result = connection.execute(query)
         task = result.scalar_one_or_none()
         
-        if not result:
+        if not task:
             return False
         
         delete_query = delete(Tasks).filter_by(id=task_id, ip_address=ip_address)
