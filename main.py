@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI):
     Base.metadata.create_all(engine)
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(title="TasksRestAPI", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
