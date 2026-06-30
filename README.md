@@ -6,7 +6,7 @@ REST-API для to-do задач
 
  - [Документация FastAPI](https://fastapi.tiangolo.com/)
 
-![fastapi preview](media/FastAPI_Preview.png)
+![fastapi preview](media/FastAPI_Preview.png?t=1)
 
 > [!IMPORTANT]    
 > txt файл со всеми библиотеками в проекте - [requirements.txt](requirements.txt)
