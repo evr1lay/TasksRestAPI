@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from contextlib import asynccontextmanager
 
 from uuid import uuid4
-from db import Base, engine, add_task_in_db, get_user_tasks
+from db import Base, engine, add_task_in_db, get_user_tasks, delete_task_from_db
 
 import uvicorn
 
@@ -53,6 +53,19 @@ async def get_tasks(request: Request) -> list:
     user_tasks = get_user_tasks(user_ip_address)
     
     return [{"id": task.id, "title": task.title, "completed": task.completed} for task in user_tasks]
+
+@app.delete("/tasks/{task_id}", tags=["🗑️ DELETE-ЗАПРОСЫ"])
+async def delete_task(task_id: str, request: Request) -> dict:
+    user_ip_address = request.client.host
+    deleted = delete_task_from_db(user_ip_address, task_id)
+    
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Task not found"
+        )
+        
+    return {"success": True}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8000, reload=True)
